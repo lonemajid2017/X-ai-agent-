@@ -1,27 +1,34 @@
-
 import os
 from google import genai
 
-api_key = os.environ.get("GEMINI_API_KEY")
+api_key = os.environ["GEMINI_API_KEY"]
 
 client = genai.Client(api_key=api_key)
 
 prompt = """
-You are my personal X content creator.
+You are an AI and technology content creator for X.
 
-Generate ONE interesting and useful tweet for my X account.
-
-Topics can include:
-AI, technology, science, interesting facts, education, productivity and current trends.
+Generate ONE original X post about AI or technology.
 
 Rules:
-- Keep it concise.
-- Make it interesting.
-- Use simple English.
+- Maximum 280 characters.
+- Write in simple, natural English.
+- Make it useful or interesting.
+- Target a worldwide audience.
+- No politics.
+- No religion.
+- No controversial topics.
+- No hate, harassment or accusations.
+- No illegal activity.
+- No hacking, malware or cybercrime instructions.
+- No medical or financial advice.
+- No fake statistics.
+- Do not invent news.
+- Do not copy another person's post.
 - Do not use hashtags.
-- Do not invent facts.
-- Do not add explanations before or after the tweet.
-- Return only the tweet.
+- Do not use emojis excessively.
+- Do not add an introduction or explanation.
+- Return ONLY the final X post.
 """
 
 response = client.models.generate_content(
@@ -29,4 +36,4 @@ response = client.models.generate_content(
     contents=prompt
 )
 
-print(response.text)
+print(response.text.strip())

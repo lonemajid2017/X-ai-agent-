@@ -16,10 +16,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Gemini SDK
-        run: pip install -U google-genai
+      - name: Install dependencies
+        run: |
+          pip install -U google-genai requests
 
-      - name: Generate AI Tweet
+      - name: Generate and Post AI Tweet
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
+          X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
+          X_REFRESH_TOKEN: ${{ secrets.X_REFRESH_TOKEN }}
         run: python Test.py

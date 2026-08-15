@@ -1,9 +1,11 @@
 import os
+import requests
 from google import genai
 
-api_key = os.environ["GEMINI_API_KEY"]
+gemini_api_key = os.environ["GEMINI_API_KEY"]
+x_access_token = os.environ["X_ACCESS_TOKEN"]
 
-client = genai.Client(api_key=api_key)
+client = genai.Client(api_key=gemini_api_key)
 
 prompt = """
 You are an AI and technology content creator for X.
@@ -36,4 +38,33 @@ response = client.models.generate_content(
     contents=prompt
 )
 
-print(response.text.strip())
+tweet = response.text.strip()
+
+if len(tweet) > 280:
+    tweet = tweet[:277].rstrip() + "..."
+
+print("Generated tweet:")
+print(tweet)
+
+headers = {
+    "Authorization": f"Bearer {x_access_token}",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "text": tweet
+}
+
+result = requests.post(
+    "https://api.x.com/2/tweets",
+    headers=headers,
+    json=data,
+    timeout=30
+)
+
+print("X API status:", result.status_code)
+print("X API response:", result.text)
+
+result.raise_for_status()
+
+print("Tweet posted successfully.")
